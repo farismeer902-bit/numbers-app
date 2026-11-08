@@ -13,68 +13,82 @@
     <script>
         tailwind.config = {
             darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        islamic: {
+                            gold: '#b89753',
+                            darkGold: '#8c703b',
+                            maroon: '#4a1525',
+                            darkMaroon: '#2e0b14',
+                            bgDark: '#1a070e',
+                        }
+                    }
+                }
+            }
         }
     </script>
     <style>
         body { font-family: 'Cairo', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
         .admin-dashboard-glow {
-            background: radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.25) 0%, transparent 45%),
-                        radial-gradient(circle at 90% 80%, rgba(14, 165, 233, 0.2) 0%, transparent 50%),
-                        radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 65%),
-                        linear-gradient(135deg, #020617 0%, #080f26 50%, #0f172a 100%);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+            background: radial-gradient(circle at 10% 20%, rgba(184, 151, 83, 0.25) 0%, transparent 45%),
+                        radial-gradient(circle at 90% 80%, rgba(74, 21, 37, 0.3) 0%, transparent 50%),
+                        linear-gradient(135deg, #2e0b14 0%, #1a070e 50%, #0d0307 100%);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(184, 151, 83, 0.2);
         }
         .admin-card-glass {
-            background: rgba(15, 23, 42, 0.7);
+            background: rgba(46, 11, 20, 0.7);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            border: 1px solid rgba(184, 151, 83, 0.3);
             box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 min-h-screen text-slate-800 dark:text-slate-100 flex flex-col justify-between selection:bg-blue-500 selection:text-white transition-colors duration-300">
+<body class="bg-amber-50/40 dark:bg-[#120408] min-h-screen text-slate-800 dark:text-amber-100 flex flex-col justify-between selection:bg-[#b89753] selection:text-white transition-colors duration-300">
 
-    <!-- Locked State Overlay (يظهر قبل الساعة 5 مساءً أو بعد العشاء) -->
-    <div id="closedOverlay" class="fixed inset-0 bg-slate-950 z-50 flex items-center justify-center p-4 hidden">
-        <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-8 text-center space-y-6 shadow-2xl relative overflow-hidden">
-            <div class="w-20 h-20 bg-blue-500/10 text-blue-400 rounded-3xl flex items-center justify-center mx-auto text-3xl font-black border border-blue-500/20 animate-pulse">
-                <i class="fa-solid fa-clock"></i>
+    <!-- Locked State Overlay (صفحة الانتظار والترقب) -->
+    <div id="closedOverlay" class="fixed inset-0 bg-[#0d0307] z-50 flex items-center justify-center p-4 hidden">
+        <div class="max-w-md w-full bg-[#1a070e] border border-[#8c703b]/40 rounded-3xl p-8 text-center space-y-6 shadow-2xl relative overflow-hidden">
+            <!-- الشعار الإسلامي في صفحة الانتظار -->
+            <div class="w-24 h-24 bg-[#2e0b14] rounded-3xl p-3 flex items-center justify-center mx-auto border border-[#b89753]/50 shadow-xl shadow-[#4a1525]/50">
+                <img src="https://i.ibb.co/6R214152/images.png" alt="شعار جامع أمهات المؤمنين" class="w-full h-full object-contain drop-shadow-[0_2px_8px_rgba(184,151,83,0.4)]" crossorigin="anonymous">
             </div>
             
             <div class="space-y-2">
-                <h2 class="text-2xl font-black text-white">جامع أمهات المؤمنين</h2>
-                <p id="closedMessage" class="text-amber-400 text-base font-extrabold">انتظر حتى الساعة الخامسة وسوف يفتح الرابط</p>
+                <h2 class="text-2xl font-black text-amber-100">جامع أمهات المؤمنين</h2>
+                <p id="closedMessage" class="text-[#b89753] text-base font-extrabold">انتظر حتى الساعة الخامسة وسوف يفتح الرابط</p>
             </div>
 
-            <div class="bg-slate-800/80 rounded-2xl p-4 border border-slate-700/80" id="countdownBox">
-                <span class="text-xs text-slate-400 block font-bold mb-1">الوقت المتبقي حتى موعد الافتتاح:</span>
-                <span id="countdownTimer" class="font-mono text-2xl font-black text-blue-400">00:00:00</span>
+            <div class="bg-[#2e0b14]/80 rounded-2xl p-4 border border-[#8c703b]/30" id="countdownBox">
+                <span class="text-xs text-amber-200/60 block font-bold mb-1">الوقت المتبقي حتى موعد الافتتاح:</span>
+                <span id="countdownTimer" class="font-mono text-2xl font-black text-[#b89753]">00:00:00</span>
             </div>
 
-            <p class="text-xs text-slate-500 font-semibold">يفتح النظام يومياً من الساعة 5:00 مساءً وحتى بعد صلاة العشاء</p>
+            <p class="text-xs text-amber-200/40 font-semibold">يفتح النظام يومياً من الساعة 5:00 مساءً وحتى بعد صلاة العشاء</p>
 
-            <button onclick="openLoginModal()" class="text-slate-600 hover:text-slate-400 text-xs font-bold pt-2 transition block mx-auto">
+            <button onclick="openLoginModal()" class="text-amber-200/50 hover:text-amber-200 text-xs font-bold pt-2 transition block mx-auto">
                 <i class="fa-solid fa-lock text-[10px]"></i> دخول المشرف
             </button>
         </div>
     </div>
 
     <!-- Header / Navbar -->
-    <header class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-sm transition-all duration-300">
-        <div class="max-w-5xl mx-auto px-4 py-3.5 flex items-center justify-between">
+    <header class="bg-white/90 dark:bg-[#1a070e]/90 backdrop-blur-md border-b border-[#b89753]/20 sticky top-0 z-30 shadow-sm transition-all duration-300">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-11 h-11 bg-gradient-to-tr from-blue-600 via-indigo-600 to-violet-600 text-white rounded-2xl flex items-center justify-center font-black text-xl shadow-lg shadow-blue-500/25">
-                    <i class="fa-solid fa-mosque"></i>
+                <!-- شعار الجامع في الهيدر -->
+                <div class="w-12 h-12 bg-[#2e0b14] rounded-2xl p-1.5 flex items-center justify-center border border-[#b89753]/40 shadow-md shadow-[#4a1525]/30">
+                    <img src="https://i.ibb.co/6R214152/images.png" alt="شعار جامع أمهات المؤمنين" class="w-full h-full object-contain" crossorigin="anonymous">
                 </div>
                 <div>
-                    <h1 class="font-black text-xl text-slate-900 dark:text-white leading-tight tracking-tight">جامع أمهات المؤمنين</h1>
-                    <p class="text-[11px] font-bold text-slate-400">نظام حجز الأرقام</p>
+                    <h1 class="font-black text-lg text-slate-900 dark:text-amber-100 leading-tight tracking-tight">جامع أمهات المؤمنين</h1>
+                    <p class="text-[10px] font-bold text-[#b89753]">نظام حجز الأرقام</p>
                 </div>
             </div>
 
             <div class="flex items-center gap-3">
-                <button onclick="toggleTheme()" class="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-amber-400 flex items-center justify-center transition border border-slate-200 dark:border-slate-700 shadow-sm" title="تبديل المظهر">
+                <button onclick="toggleTheme()" class="w-10 h-10 rounded-2xl bg-amber-100/50 dark:bg-[#2e0b14] hover:bg-amber-200/50 dark:hover:bg-[#4a1525] text-[#8c703b] dark:text-[#b89753] flex items-center justify-center transition border border-[#b89753]/30 shadow-sm" title="تبديل المظهر">
                     <i id="themeIcon" class="fa-solid fa-moon text-base"></i>
                 </button>
                 <div id="authHeaderArea"></div>
@@ -83,26 +97,26 @@
     </header>
 
     <!-- Admin Dashboard Panel -->
-    <div id="adminPanelBanner" class="hidden admin-dashboard-glow text-white border-b-2 border-emerald-500/50 relative overflow-hidden transition-all duration-500">
+    <div id="adminPanelBanner" class="hidden admin-dashboard-glow text-white border-b-2 border-[#b89753]/50 relative overflow-hidden transition-all duration-500">
         <div class="max-w-5xl mx-auto px-4 py-8 relative z-10 space-y-6">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-800/80">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-[#8c703b]/30">
                 <div class="flex items-center gap-4">
-                    <div class="w-16 h-16 bg-gradient-to-tr from-emerald-400 via-teal-500 to-cyan-500 text-slate-950 rounded-2xl flex items-center justify-center font-black text-3xl shadow-xl shadow-emerald-500/30">
+                    <div class="w-16 h-16 bg-gradient-to-tr from-[#b89753] via-[#8c703b] to-[#4a1525] text-white rounded-2xl flex items-center justify-center font-black text-3xl shadow-xl shadow-[#b89753]/20">
                         <i class="fa-solid fa-user-gear"></i>
                     </div>
                     <div>
-                        <h2 class="font-black text-2xl text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-teal-200 to-cyan-200">مركز عمليات وتوجيه المشرف</h2>
-                        <p class="text-xs text-slate-400 mt-1 font-semibold">لوحة الإدارة المتقدمة لمتابعة وتفريغ الحجوزات سحابياً</p>
+                        <h2 class="font-black text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-[#b89753] to-amber-100">مركز عمليات وتوجيه المشرف</h2>
+                        <p class="text-xs text-amber-200/70 mt-1 font-semibold">لوحة الإدارة المتقدمة لمتابعة وتفريغ الحجوزات سحابياً</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2.5 flex-wrap">
-                    <button onclick="copyAllBookingsSummary()" class="text-xs font-black px-4 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-cyan-300 border border-cyan-500/40 transition shadow-md flex items-center gap-2">
+                    <button onclick="copyAllBookingsSummary()" class="text-xs font-black px-4 py-2.5 rounded-xl bg-[#2e0b14] hover:bg-[#4a1525] text-amber-200 border border-[#b89753]/40 transition shadow-md flex items-center gap-2">
                         <i class="fa-solid fa-copy text-sm"></i> نسخ ملخص الحجوزات
                     </button>
-                    <button onclick="confirmResetAllBookings()" class="text-xs font-black px-4 py-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/40 transition shadow-md flex items-center gap-2">
+                    <button onclick="confirmResetAllBookings()" class="text-xs font-black px-4 py-2.5 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/40 transition shadow-md flex items-center gap-2">
                         <i class="fa-solid fa-rotate-left text-sm"></i> تفريغ الكُل
                     </button>
-                    <button onclick="handleAdminLogout()" class="text-xs font-black px-4 py-2.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 transition shadow-md flex items-center gap-2">
+                    <button onclick="handleAdminLogout()" class="text-xs font-black px-4 py-2.5 rounded-xl bg-rose-950/60 hover:bg-rose-900 text-rose-200 border border-rose-500/40 transition shadow-md flex items-center gap-2">
                         <i class="fa-solid fa-power-off text-sm"></i> خروج المشرف
                     </button>
                 </div>
@@ -110,16 +124,16 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="admin-card-glass p-5 rounded-2xl flex flex-col justify-between">
-                    <span class="text-[11px] font-black text-slate-400">إجمالي قائمة الطلاب</span>
+                    <span class="text-[11px] font-black text-amber-200/60">إجمالي قائمة الطلاب</span>
                     <span class="text-3xl font-black text-white mt-3">21</span>
                 </div>
-                <div class="admin-card-glass p-5 rounded-2xl flex flex-col justify-between border-emerald-500/40">
-                    <span class="text-[11px] font-black text-emerald-400">الأرقام المحجوزة</span>
-                    <span id="adminStatBooked" class="text-3xl font-black text-emerald-300 mt-3">0</span>
+                <div class="admin-card-glass p-5 rounded-2xl flex flex-col justify-between border-[#b89753]/50">
+                    <span class="text-[11px] font-black text-[#b89753]">الأرقام المحجوزة</span>
+                    <span id="adminStatBooked" class="text-3xl font-black text-amber-200 mt-3">0</span>
                 </div>
-                <div class="admin-card-glass p-5 rounded-2xl flex flex-col justify-between border-cyan-500/40">
-                    <span class="text-[11px] font-black text-cyan-400">الأرقام المتاحة</span>
-                    <span id="adminStatRemaining" class="text-3xl font-black text-cyan-300 mt-3">21</span>
+                <div class="admin-card-glass p-5 rounded-2xl flex flex-col justify-between border-amber-500/40">
+                    <span class="text-[11px] font-black text-amber-400">الأرقام المتاحة</span>
+                    <span id="adminStatRemaining" class="text-3xl font-black text-amber-300 mt-3">21</span>
                 </div>
             </div>
         </div>
@@ -127,22 +141,22 @@
 
     <!-- Main App Container -->
     <main class="max-w-5xl mx-auto px-4 py-8 w-full flex-grow space-y-8">
-        <section class="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-xl border border-slate-100 dark:border-slate-800" id="mainActionCard">
+        <section class="bg-white dark:bg-[#1a070e] rounded-3xl p-6 md:p-8 shadow-xl border border-amber-200/50 dark:border-[#b89753]/20" id="mainActionCard">
             <!-- Dynamic Content -->
         </section>
 
-        <section class="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-xl border border-slate-100 dark:border-slate-800" id="bookingsSection">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
+        <section class="bg-white dark:bg-[#1a070e] rounded-3xl p-6 md:p-8 shadow-xl border border-amber-200/50 dark:border-[#b89753]/20" id="bookingsSection">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-amber-100 dark:border-[#8c703b]/20">
                 <div>
-                    <h3 class="text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-2.5">
-                        <i class="fa-solid fa-list-check text-blue-600"></i> جدول الحجوزات الحالية (سحابياً)
+                    <h3 class="text-lg font-extrabold text-slate-900 dark:text-amber-100 flex items-center gap-2.5">
+                        <i class="fa-solid fa-list-check text-[#b89753]"></i> جدول الحجوزات الحالية (سحابياً)
                     </h3>
-                    <p class="text-xs font-semibold text-slate-400 mt-0.5">إجمالي الأرقام المحجوزة: <span id="totalBookingsCount" class="font-black text-blue-600 bg-blue-50 dark:bg-blue-950 px-2 py-0.5 rounded-md">0</span></p>
+                    <p class="text-xs font-semibold text-slate-400 mt-0.5">إجمالي الأرقام المحجوزة: <span id="totalBookingsCount" class="font-black text-[#b89753] bg-amber-50 dark:bg-[#2e0b14] px-2 py-0.5 rounded-md border border-[#b89753]/30">0</span></p>
                 </div>
                 <div class="relative w-full sm:w-72">
                     <input type="text" id="searchInput" oninput="renderBookings()" placeholder="بحث باسم الطالب أو الرقم..."
-                        class="w-full pr-10 pl-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-xs font-bold text-slate-800 dark:text-slate-100 outline-none shadow-inner">
-                    <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-3 text-slate-400 text-sm"></i>
+                        class="w-full pr-10 pl-4 py-2.5 bg-slate-50 dark:bg-[#2e0b14] border border-amber-200 dark:border-[#8c703b]/40 rounded-2xl text-xs font-bold text-slate-800 dark:text-amber-100 outline-none shadow-inner">
+                    <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-3 text-[#b89753] text-sm"></i>
                 </div>
             </div>
             <div id="bookingsListContainer"></div>
@@ -150,24 +164,24 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-5 text-center text-xs text-slate-400 font-bold">
+    <footer class="bg-white dark:bg-[#1a070e] border-t border-amber-200/50 dark:border-[#b89753]/20 py-5 text-center text-xs text-slate-400 dark:text-amber-200/50 font-bold">
         جامع أمهات المؤمنين &copy; 2026 - جميع الحقوق محفوظة
     </footer>
 
     <!-- Admin Login Modal -->
-    <div id="loginModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white dark:bg-slate-900 rounded-3xl p-7 max-w-sm w-full shadow-2xl border border-slate-100 dark:border-slate-800 space-y-5 relative">
-            <button onclick="closeLoginModal()" class="absolute left-4 top-4 text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+    <div id="loginModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-[#1a070e] rounded-3xl p-7 max-w-sm w-full shadow-2xl border border-[#b89753]/40 space-y-5 relative">
+            <button onclick="closeLoginModal()" class="absolute left-4 top-4 text-slate-400 hover:text-slate-700 dark:hover:text-amber-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-[#2e0b14] flex items-center justify-center">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
             <div class="text-center space-y-2">
-                <h3 class="font-black text-slate-900 dark:text-white text-lg">بوابة دخول المشرف</h3>
+                <h3 class="font-black text-slate-900 dark:text-amber-100 text-lg">بوابة دخول المشرف</h3>
             </div>
             <form onsubmit="handleAdminLogin(event)" class="space-y-4">
                 <input type="password" id="loginInputCode" required placeholder="رمز المشرف السري"
-                    class="w-full px-4 py-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-center font-black outline-none text-slate-900 dark:text-white text-base tracking-widest">
-                <div id="loginErrorMsg" class="hidden text-center text-xs text-rose-600 font-black">الرمز غير صحيح!</div>
-                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black py-3.5 rounded-2xl text-xs">دخول اللوحة</button>
+                    class="w-full px-4 py-3.5 bg-slate-50 dark:bg-[#2e0b14] border border-amber-200 dark:border-[#8c703b]/40 rounded-2xl text-center font-black outline-none text-slate-900 dark:text-amber-100 text-base tracking-widest">
+                <div id="loginErrorMsg" class="hidden text-center text-xs text-rose-500 font-black">الرمز غير صحيح!</div>
+                <button type="submit" class="w-full bg-[#b89753] hover:bg-[#8c703b] text-slate-950 font-black py-3.5 rounded-2xl text-xs transition">دخول اللوحة</button>
             </form>
         </div>
     </div>
@@ -237,7 +251,6 @@
             setupRealtimeBookings();
         };
 
-        // دالة التحكم بوقت الافتتاح (5 عصراً) والإغلاق والحذف التلقائي بعد العشاء (8:30 مساءً)
         async function checkTimeRestriction() {
             if (isAdminLoggedIn) {
                 document.getElementById('closedOverlay').classList.add('hidden');
@@ -247,17 +260,16 @@
             const now = new Date();
             const currentHour = now.getHours();
             const currentMinute = now.getMinutes();
-            const currentTimeVal = currentHour * 60 + currentMinute; // بالدقائق
+            const currentTimeVal = currentHour * 60 + currentMinute;
 
             const openTimeVal = 17 * 60;       // 5:00 مساءً
-            const closeTimeVal = 20 * 60 + 30; // 8:30 مساءً (بعد صلاة العشاء)
+            const closeTimeVal = 20 * 60 + 30; // 8:30 مساءً
 
             const overlay = document.getElementById('closedOverlay');
             const msgEl = document.getElementById('closedMessage');
             const timerBox = document.getElementById('countdownBox');
 
             if (currentTimeVal < openTimeVal) {
-                // قبل الساعة 5 مساءً
                 overlay.classList.remove('hidden');
                 timerBox.classList.remove('hidden');
                 msgEl.innerText = "انتظر حتى الساعة الخامسة وسوف يفتح الرابط";
@@ -267,12 +279,10 @@
                 updateCountdown(targetTime, now);
             } 
             else if (currentTimeVal >= closeTimeVal) {
-                // بعد صلاة العشاء (8:30 مساءً) -> إغلاق وحذف الحجوزات تلقائياً إن وجدت
                 overlay.classList.remove('hidden');
                 timerBox.classList.add('hidden');
                 msgEl.innerText = "انتهى وقت الحجز وتم إغلاق النظام حتى يوم غد";
 
-                // حذف جميع الحجوزات تلقائياً من السحابة إذا لم تكن فارغة
                 if (bookings.length > 0) {
                     try {
                         const batch = writeBatch(db);
@@ -286,7 +296,6 @@
                 }
             } 
             else {
-                // خلال أوقات العمل المسموحة
                 overlay.classList.add('hidden');
             }
         }
@@ -436,47 +445,47 @@
             if (!loggedInStudent) {
                 container.innerHTML = `
                     <div class="text-center max-w-md mx-auto space-y-5 py-2">
-                        <div class="w-16 h-16 bg-blue-50 dark:bg-slate-800 text-blue-600 rounded-3xl flex items-center justify-center mx-auto text-2xl font-black">
+                        <div class="w-16 h-16 bg-amber-50 dark:bg-[#2e0b14] text-[#b89753] rounded-3xl flex items-center justify-center mx-auto text-2xl font-black border border-[#b89753]/30">
                             <i class="fa-solid fa-id-card"></i>
                         </div>
                         <div>
-                            <h2 class="text-xl font-black text-slate-900 dark:text-white">تسجيل دخول الطالب</h2>
+                            <h2 class="text-xl font-black text-slate-900 dark:text-amber-100">تسجيل دخول الطالب</h2>
                             <p class="text-xs font-semibold text-slate-400 mt-1">أدخل الكود الخاص بك والمكون من 4 أرقام لبدء الحجز</p>
                         </div>
                         <form onsubmit="handleStudentLogin(event)" class="space-y-4">
                             <input type="text" id="studentCodeInput" required placeholder="أدخل الكود (4 أرقام)" maxlength="4"
-                                class="w-full px-4 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-center font-mono tracking-[0.3em] font-black text-slate-900 dark:text-white text-xl outline-none shadow-inner">
-                            <div id="studentLoginError" class="hidden text-xs text-rose-600 font-black">الكود غير صحيح!</div>
-                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl shadow-lg text-sm">تسجيل الدخول</button>
+                                class="w-full px-4 py-4 bg-slate-50 dark:bg-[#2e0b14] border border-amber-200 dark:border-[#8c703b]/40 rounded-2xl text-center font-mono tracking-[0.3em] font-black text-slate-900 dark:text-amber-100 text-xl outline-none shadow-inner">
+                            <div id="studentLoginError" class="hidden text-xs text-rose-500 font-black">الكود غير صحيح!</div>
+                            <button type="submit" class="w-full bg-[#b89753] hover:bg-[#8c703b] text-slate-950 font-black py-4 rounded-2xl shadow-lg text-sm transition">تسجيل الدخول</button>
                         </form>
                     </div>
                 `;
             } else {
                 const existingBooking = bookings.find(b => b.studentCode === loggedInStudent.code);
                 container.innerHTML = `
-                    <div class="flex items-center justify-between pb-5 mb-5 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center justify-between pb-5 mb-5 border-b border-amber-100 dark:border-[#8c703b]/20">
                         <div class="flex items-center gap-3.5">
-                            <div class="w-12 h-12 bg-emerald-500 text-white rounded-2xl flex items-center justify-center font-black text-xl">
+                            <div class="w-12 h-12 bg-[#b89753] text-slate-950 rounded-2xl flex items-center justify-center font-black text-xl shadow-md">
                                 <i class="fa-solid fa-user-graduate"></i>
                             </div>
                             <div>
-                                <h2 class="text-base font-black text-slate-900 dark:text-white">مرحباً: ${loggedInStudent.name}</h2>
+                                <h2 class="text-base font-black text-slate-900 dark:text-amber-100">مرحباً: ${loggedInStudent.name}</h2>
                                 <p class="text-xs font-semibold text-slate-400">حساب طالب موثق</p>
                             </div>
                         </div>
-                        <button onclick="handleStudentLogout()" class="text-xs text-slate-600 dark:text-slate-300 hover:text-rose-600 bg-slate-100 dark:bg-slate-800 px-4 py-2 rounded-xl font-bold">تسجيل الخروج</button>
+                        <button onclick="handleStudentLogout()" class="text-xs text-slate-600 dark:text-amber-200/80 hover:text-rose-500 bg-amber-100/40 dark:bg-[#2e0b14] px-4 py-2 rounded-xl font-bold border border-[#b89753]/30">تسجيل الخروج</button>
                     </div>
                     ${existingBooking ? `
-                        <div class="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-2xl p-6 text-center space-y-3">
-                            <h3 class="font-black text-emerald-900 dark:text-emerald-300 text-base">تم حجز الرقم المميز بنجاح!</h3>
-                            <p class="text-xs font-semibold text-emerald-700 dark:text-emerald-400">رقمك المحجوز: <span class="font-black text-2xl text-emerald-800 dark:text-emerald-200 bg-white dark:bg-slate-900 px-4 py-1 rounded-xl">#${existingBooking.number}</span></p>
+                        <div class="bg-amber-50 dark:bg-[#2e0b14]/60 border border-[#b89753]/40 rounded-2xl p-6 text-center space-y-3">
+                            <h3 class="font-black text-amber-900 dark:text-amber-200 text-base">تم حجز الرقم المميز بنجاح!</h3>
+                            <p class="text-xs font-semibold text-amber-800 dark:text-amber-300/80">رقمك المحجوز: <span class="font-black text-2xl text-amber-950 dark:text-amber-100 bg-white dark:bg-[#1a070e] px-4 py-1 rounded-xl border border-[#b89753]/30">#${existingBooking.number}</span></p>
                         </div>
                     ` : `
                         <form onsubmit="handleMakeBooking(event)" class="space-y-4">
-                            <label class="block text-xs font-black text-slate-700 dark:text-slate-300 mb-1.5">أدخل الرقم المميز الذي ترغب بحجزه</label>
+                            <label class="block text-xs font-black text-slate-700 dark:text-amber-200/80 mb-1.5">أدخل الرقم المميز الذي ترغب بحجزه</label>
                             <input type="number" id="desiredNumberInput" required min="1" max="9999" placeholder="مثال: 7"
-                                class="w-full px-4 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-white text-center text-xl font-black outline-none shadow-inner">
-                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl shadow-lg text-sm">تأكيد وتوثيق الحجز</button>
+                                class="w-full px-4 py-4 bg-slate-50 dark:bg-[#2e0b14] border border-amber-200 dark:border-[#8c703b]/40 rounded-2xl text-slate-900 dark:text-amber-100 text-center text-xl font-black outline-none shadow-inner">
+                            <button type="submit" class="w-full bg-[#b89753] hover:bg-[#8c703b] text-slate-950 font-black py-4 rounded-2xl shadow-lg text-sm transition">تأكيد وتوثيق الحجز</button>
                         </form>
                     `}
                 `;
@@ -499,15 +508,15 @@
             container.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     ${filtered.map(b => `
-                        <div class="${isAdminLoggedIn ? 'bg-slate-900 border-emerald-500/40 text-white' : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100'} border rounded-2xl p-4 flex items-center justify-between">
+                        <div class="${isAdminLoggedIn ? 'bg-[#1a070e] border-[#b89753]/50 text-amber-100' : 'bg-slate-50 dark:bg-[#2e0b14]/50 border-amber-200 dark:border-[#8c703b]/30 text-slate-800 dark:text-amber-100'} border rounded-2xl p-4 flex items-center justify-between">
                             <div class="flex items-center gap-3.5">
-                                <div class="px-4 py-2.5 ${isAdminLoggedIn ? 'bg-emerald-400 text-slate-950' : 'bg-blue-600 text-white'} rounded-xl font-black text-2xl">#${b.number}</div>
+                                <div class="px-4 py-2.5 ${isAdminLoggedIn ? 'bg-[#b89753] text-slate-950' : 'bg-[#b89753] text-slate-950'} rounded-xl font-black text-2xl shadow">#${b.number}</div>
                                 <div>
                                     <h4 class="font-black text-base">${b.studentName}</h4>
-                                    <span class="text-xs text-slate-400">${b.bookedAt}</span>
+                                    <span class="text-xs text-slate-400 dark:text-amber-200/50">${b.bookedAt}</span>
                                 </div>
                             </div>
-                            ${isAdminLoggedIn ? `<button onclick="deleteBooking('${b.number}')" class="text-xs bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 font-bold px-3 py-2 rounded-xl border border-rose-500/30">تفريغ</button>` : ''}
+                            ${isAdminLoggedIn ? `<button onclick="deleteBooking('${b.number}')" class="text-xs bg-rose-950/80 hover:bg-rose-900 text-rose-200 font-bold px-3 py-2 rounded-xl border border-rose-500/40">تفريغ</button>` : ''}
                         </div>
                     `).join('')}
                 </div>
@@ -519,13 +528,13 @@
             if (isAdminLoggedIn) {
                 container.innerHTML = `
                     <div class="flex items-center gap-2.5">
-                        <span class="text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-extrabold px-3.5 py-2 rounded-2xl border border-emerald-500/30">المشرف</span>
-                        <button onclick="handleAdminLogout()" class="text-xs text-rose-600 bg-rose-50 dark:bg-rose-950 font-bold px-3.5 py-2 rounded-2xl">خروج</button>
+                        <span class="text-xs bg-[#b89753]/10 text-[#b89753] font-extrabold px-3.5 py-2 rounded-2xl border border-[#b89753]/30">المشرف</span>
+                        <button onclick="handleAdminLogout()" class="text-xs text-rose-300 bg-rose-950/60 font-bold px-3.5 py-2 rounded-2xl border border-rose-500/30">خروج</button>
                     </div>
                 `;
             } else {
                 container.innerHTML = `
-                    <button onclick="openLoginModal()" class="text-xs text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 font-bold px-4 py-2.5 rounded-2xl flex items-center gap-2">
+                    <button onclick="openLoginModal()" class="text-xs text-slate-700 dark:text-amber-100 bg-amber-100/60 dark:bg-[#2e0b14] font-bold px-4 py-2.5 rounded-2xl flex items-center gap-2 border border-[#b89753]/30">
                         <i class="fa-solid fa-user-gear"></i> دخول المشرف
                     </button>
                 `;
@@ -553,7 +562,7 @@
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            toast.className = `flex items-center gap-3 px-4 py-3 rounded-2xl border text-xs font-bold shadow-xl bg-slate-900 text-white border-slate-700`;
+            toast.className = `flex items-center gap-3 px-4 py-3 rounded-2xl border text-xs font-bold shadow-xl bg-[#1a070e] text-amber-100 border-[#b89753]/40`;
             toast.innerHTML = `<span>${message}</span>`;
             container.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
