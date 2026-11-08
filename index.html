@@ -35,6 +35,31 @@
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 min-h-screen text-slate-800 dark:text-slate-100 flex flex-col justify-between selection:bg-blue-500 selection:text-white transition-colors duration-300">
 
+    <!-- Locked State Overlay (يظهر قبل الساعة 5 مساءً أو بعد العشاء) -->
+    <div id="closedOverlay" class="fixed inset-0 bg-slate-950 z-50 flex items-center justify-center p-4 hidden">
+        <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-8 text-center space-y-6 shadow-2xl relative overflow-hidden">
+            <div class="w-20 h-20 bg-blue-500/10 text-blue-400 rounded-3xl flex items-center justify-center mx-auto text-3xl font-black border border-blue-500/20 animate-pulse">
+                <i class="fa-solid fa-clock"></i>
+            </div>
+            
+            <div class="space-y-2">
+                <h2 class="text-2xl font-black text-white">جامع أمهات المؤمنين</h2>
+                <p id="closedMessage" class="text-amber-400 text-base font-extrabold">انتظر حتى الساعة الخامسة وسوف يفتح الرابط</p>
+            </div>
+
+            <div class="bg-slate-800/80 rounded-2xl p-4 border border-slate-700/80" id="countdownBox">
+                <span class="text-xs text-slate-400 block font-bold mb-1">الوقت المتبقي حتى موعد الافتتاح:</span>
+                <span id="countdownTimer" class="font-mono text-2xl font-black text-blue-400">00:00:00</span>
+            </div>
+
+            <p class="text-xs text-slate-500 font-semibold">يفتح النظام يومياً من الساعة 5:00 مساءً وحتى بعد صلاة العشاء</p>
+
+            <button onclick="openLoginModal()" class="text-slate-600 hover:text-slate-400 text-xs font-bold pt-2 transition block mx-auto">
+                <i class="fa-solid fa-lock text-[10px]"></i> دخول المشرف
+            </button>
+        </div>
+    </div>
+
     <!-- Header / Navbar -->
     <header class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-sm transition-all duration-300">
         <div class="max-w-5xl mx-auto px-4 py-3.5 flex items-center justify-between">
@@ -205,10 +230,79 @@
 
         window.onload = function() {
             initTheme();
+            checkTimeRestriction();
+            setInterval(checkTimeRestriction, 1000); 
             renderHeader();
             renderMainPanel();
             setupRealtimeBookings();
         };
+
+        // دالة التحكم بوقت الافتتاح (5 عصراً) والإغلاق والحذف التلقائي بعد العشاء (8:30 مساءً)
+        async function checkTimeRestriction() {
+            if (isAdminLoggedIn) {
+                document.getElementById('closedOverlay').classList.add('hidden');
+                return;
+            }
+
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            const currentTimeVal = currentHour * 60 + currentMinute; // بالدقائق
+
+            const openTimeVal = 17 * 60;       // 5:00 مساءً
+            const closeTimeVal = 20 * 60 + 30; // 8:30 مساءً (بعد صلاة العشاء)
+
+            const overlay = document.getElementById('closedOverlay');
+            const msgEl = document.getElementById('closedMessage');
+            const timerBox = document.getElementById('countdownBox');
+
+            if (currentTimeVal < openTimeVal) {
+                // قبل الساعة 5 مساءً
+                overlay.classList.remove('hidden');
+                timerBox.classList.remove('hidden');
+                msgEl.innerText = "انتظر حتى الساعة الخامسة وسوف يفتح الرابط";
+                
+                const targetTime = new Date();
+                targetTime.setHours(17, 0, 0, 0);
+                updateCountdown(targetTime, now);
+            } 
+            else if (currentTimeVal >= closeTimeVal) {
+                // بعد صلاة العشاء (8:30 مساءً) -> إغلاق وحذف الحجوزات تلقائياً إن وجدت
+                overlay.classList.remove('hidden');
+                timerBox.classList.add('hidden');
+                msgEl.innerText = "انتهى وقت الحجز وتم إغلاق النظام حتى يوم غد";
+
+                // حذف جميع الحجوزات تلقائياً من السحابة إذا لم تكن فارغة
+                if (bookings.length > 0) {
+                    try {
+                        const batch = writeBatch(db);
+                        for (let b of bookings) {
+                            batch.delete(doc(db, "bookings", b.number));
+                        }
+                        await batch.commit();
+                    } catch (e) {
+                        console.error("Auto clear error", e);
+                    }
+                }
+            } 
+            else {
+                // خلال أوقات العمل المسموحة
+                overlay.classList.add('hidden');
+            }
+        }
+
+        function updateCountdown(targetTime, now) {
+            const diff = targetTime - now;
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            const formatNum = num => String(num).padStart(2, '0');
+            const timerEl = document.getElementById('countdownTimer');
+            if (timerEl) {
+                timerEl.innerText = `${formatNum(hours)}:${formatNum(minutes)}:${formatNum(seconds)}`;
+            }
+        }
 
         function setupRealtimeBookings() {
             onSnapshot(collection(db, "bookings"), (snapshot) => {
@@ -306,6 +400,7 @@
                 isAdminLoggedIn = true;
                 localStorage.setItem("numbers_admin", "true");
                 closeLoginModal();
+                checkTimeRestriction();
                 renderHeader();
                 renderBookings();
                 updateAdminStats();
@@ -318,6 +413,7 @@
         window.handleAdminLogout = function() {
             isAdminLoggedIn = false;
             localStorage.setItem("numbers_admin", "false");
+            checkTimeRestriction();
             renderHeader();
             renderBookings();
             updateAdminStats();
