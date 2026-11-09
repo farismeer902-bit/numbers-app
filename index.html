@@ -8,8 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Cairo Font (الرابط المؤقت لخط كاييرو) -->
-    <link href="https://res.cloudinary.com/dtz0urit6/image/upload/q_auto:best,f_jpg/cloudinary-tools-uploads/wtkl4r3ddvlyy7calbm9" rel="stylesheet">
+    <!-- Cairo Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -65,7 +65,7 @@
                 <span id="countdownTimer" class="font-mono text-2xl font-black text-[#b89753]">00:00:00</span>
             </div>
 
-            <p class="text-xs text-amber-200/40 font-semibold">يفتح النظام يومياً من الساعة 5:00 مساءً وحتى بعد صلاة العشاء</p>
+            <p class="text-xs text-amber-200/40 font-semibold">يفتح النظام يومياً من الساعة 5:00 مساءً وحتى الساعة 8:30 مساءً</p>
 
             <button onclick="openLoginModal()" class="text-amber-200/50 hover:text-amber-200 text-xs font-bold pt-2 transition block mx-auto">
                 <i class="fa-solid fa-lock text-[10px]"></i> دخول المشرف
@@ -263,7 +263,7 @@
             const currentTimeVal = currentHour * 60 + currentMinute;
 
             const openTimeVal = 17 * 60;       // 5:00 مساءً
-            const closeTimeVal = 20 * 60 + 30; // 8:30 مساءً
+            const closeTimeVal = 20 * 60 + 30; // 8:30 مساءً (تم التعديل إلى الثامنة والنصف)
 
             const overlay = document.getElementById('closedOverlay');
             const msgEl = document.getElementById('closedMessage');
