@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>جامع أمهات المؤمنين - نظام حجز الأرقام</title>
+    <link rel="icon" href="https://res.cloudinary.com/dtz0urit6/image/upload/q_auto:best,f_png/cloudinary-tools-uploads/gfsdp2ybbi6bwtng7cfa">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -50,9 +51,9 @@
     <!-- Locked State Overlay (صفحة الانتظار والترقب) -->
     <div id="closedOverlay" class="fixed inset-0 bg-[#0d0307] z-50 flex items-center justify-center p-4 hidden">
         <div class="max-w-md w-full bg-[#1a070e] border border-[#8c703b]/40 rounded-3xl p-8 text-center space-y-6 shadow-2xl relative overflow-hidden">
-            <!-- الشعار الإسلامي في صفحة الانتظار -->
-            <div class="w-24 h-24 bg-[#2e0b14] rounded-3xl p-3 flex items-center justify-center mx-auto border border-[#b89753]/50 shadow-xl shadow-[#4a1525]/50">
-                <img src="https://i.ibb.co/6R214152/images.png" alt="شعار جامع أمهات المؤمنين" class="w-full h-full object-contain drop-shadow-[0_2px_8px_rgba(184,151,83,0.4)]" crossorigin="anonymous">
+            <!-- الشعار في صفحة الانتظار -->
+            <div class="w-24 h-24 flex items-center justify-center mx-auto">
+                <img src="https://res.cloudinary.com/dtz0urit6/image/upload/q_auto:best,f_png/cloudinary-tools-uploads/gfsdp2ybbi6bwtng7cfa" alt="شعار جامع أمهات المؤمنين" class="w-full h-full object-contain">
             </div>
             
             <div class="space-y-2">
@@ -77,9 +78,9 @@
     <header class="bg-white/90 dark:bg-[#1a070e]/90 backdrop-blur-md border-b border-[#b89753]/20 sticky top-0 z-30 shadow-sm transition-all duration-300">
         <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <!-- شعار الجامع في الهيدر -->
-                <div class="w-12 h-12 bg-[#2e0b14] rounded-2xl p-1.5 flex items-center justify-center border border-[#b89753]/40 shadow-md shadow-[#4a1525]/30">
-                    <img src="https://i.ibb.co/6R214152/images.png" alt="شعار جامع أمهات المؤمنين" class="w-full h-full object-contain" crossorigin="anonymous">
+                <!-- الشعار في الهيدر -->
+                <div class="w-12 h-12 flex items-center justify-center">
+                    <img src="https://res.cloudinary.com/dtz0urit6/image/upload/q_auto:best,f_png/cloudinary-tools-uploads/gfsdp2ybbi6bwtng7cfa" alt="شعار جامع أمهات المؤمنين" class="w-full h-full object-contain">
                 </div>
                 <div>
                     <h1 class="font-black text-lg text-slate-900 dark:text-amber-100 leading-tight tracking-tight">جامع أمهات المؤمنين</h1>
@@ -263,7 +264,7 @@
             const currentTimeVal = currentHour * 60 + currentMinute;
 
             const openTimeVal = 17 * 60;       // 5:00 مساءً
-            const closeTimeVal = 20 * 60 + 30; // 8:30 مساءً (تم التعديل إلى الثامنة والنصف)
+            const closeTimeVal = 20 * 60 + 30; // 8:30 مساءً (تم ضبطه على الثامنة والنصف)
 
             const overlay = document.getElementById('closedOverlay');
             const msgEl = document.getElementById('closedMessage');
@@ -404,7 +405,10 @@
 
         window.handleAdminLogin = function(event) {
             event.preventDefault();
-            const inputCode = document.getElementById('loginInputCode').value.trim();
+            const toEnglishDigits = str => str
+                .replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 1632))
+                .replace(/[۰-۹]/g, d => String(d.charCodeAt(0) - 1776));
+            const inputCode = toEnglishDigits(document.getElementById('loginInputCode').value).replace(/\s+/g, '');
             if (inputCode === ADMIN_PHONE) {
                 isAdminLoggedIn = true;
                 localStorage.setItem("numbers_admin", "true");
@@ -417,6 +421,18 @@
             } else {
                 document.getElementById('loginErrorMsg').classList.remove('hidden');
             }
+        };
+
+        window.copyAllBookingsSummary = function() {
+            if (bookings.length === 0) { showToast("لا توجد حجوزات لنسخها.", "info"); return; }
+            const text = bookings
+                .slice()
+                .sort((a, b) => Number(a.number) - Number(b.number))
+                .map(b => `#${b.number} - ${b.studentName}`)
+                .join('\n');
+            navigator.clipboard.writeText(text)
+                .then(() => showToast("تم نسخ ملخص الحجوزات.", "success"))
+                .catch(() => showToast("تعذر النسخ.", "error"));
         };
 
         window.handleAdminLogout = function() {
