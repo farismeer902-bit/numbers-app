@@ -167,7 +167,7 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-amber-100 dark:border-[#8c703b]/20">
                 <div>
                     <h3 class="text-lg font-extrabold text-slate-900 dark:text-amber-100 flex items-center gap-2.5">
-                        <i class="fa-solid fa-list-check text-[#b89753]"></i> جدول الحجوزات الحالية (سحابياً)
+                        <i class="fa-solid fa-list-check text-[#b89753]"></i> جدول الحجوزات الحالية (مرتبة حسب الرقم)
                     </h3>
                     <p class="text-xs font-semibold text-slate-400 mt-0.5">إجمالي الأرقام المحجوزة: <span id="totalBookingsCount" class="font-black text-[#b89753] bg-amber-50 dark:bg-[#2e0b14] px-2 py-0.5 rounded-md border border-[#b89753]/30">0</span></p>
                 </div>
@@ -348,7 +348,6 @@
             const container = document.getElementById('topStudentsContainer');
             if (!container) return;
 
-            // حساب الإحصائيات (أفضل 3 طلاب قاموا بالحجز مبكراً)
             const sortedBookings = [...bookings].sort((a, b) => (a.bookedAt > b.bookedAt ? 1 : -1));
             const top3 = sortedBookings.slice(0, 3);
 
@@ -557,7 +556,9 @@
             const countDisplay = document.getElementById('totalBookingsCount');
             if (countDisplay) countDisplay.innerText = bookings.length;
 
-            const filtered = bookings.filter(b => b.number.includes(searchVal) || b.studentName.toLowerCase().includes(searchVal));
+            // ترتيب الحجوزات تصاعدياً بناءً على الرقم المدخل (من الأصغر للأكبر: 1, 2, 3...)
+            const sortedBookings = [...bookings].sort((a, b) => Number(a.number) - Number(b.number));
+            const filtered = sortedBookings.filter(b => b.number.includes(searchVal) || b.studentName.toLowerCase().includes(searchVal));
 
             if (filtered.length === 0) {
                 container.innerHTML = `<div class="py-14 text-center text-slate-400 text-xs font-bold">${searchVal ? 'لا يوجد نتائج مطابقة' : 'لا توجد أي أرقام محجوزة سحابياً حتى الآن'}</div>`;
