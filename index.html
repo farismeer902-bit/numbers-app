@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>جامع أمهات المؤمنين - نظام حجز الأرقام</title>
-    <link rel="icon" href="https://res.cloudinary.com/dtz0urit6/image/upload/q_auto:best,f_png/cloudinary-tools-uploads/gfsdp2ybbi6bwtng7cfa">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -44,16 +43,20 @@
             border: 1px solid rgba(184, 151, 83, 0.3);
             box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
         }
+        .podium-card {
+            background: linear-gradient(145deg, rgba(46, 11, 20, 0.9), rgba(26, 7, 14, 0.95));
+            border: 1px solid rgba(184, 151, 83, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(184, 151, 83, 0.15);
+        }
     </style>
 </head>
 <body class="bg-amber-50/40 dark:bg-[#120408] min-h-screen text-slate-800 dark:text-amber-100 flex flex-col justify-between selection:bg-[#b89753] selection:text-white transition-colors duration-300">
 
-    <!-- Locked State Overlay (صفحة الانتظار والترقب) -->
+    <!-- Locked State Overlay -->
     <div id="closedOverlay" class="fixed inset-0 bg-[#0d0307] z-50 flex items-center justify-center p-4 hidden">
         <div class="max-w-md w-full bg-[#1a070e] border border-[#8c703b]/40 rounded-3xl p-8 text-center space-y-6 shadow-2xl relative overflow-hidden">
-            <!-- الشعار في صفحة الانتظار -->
-            <div class="w-24 h-24 flex items-center justify-center mx-auto">
-                <img src="https://res.cloudinary.com/dtz0urit6/image/upload/q_auto:best,f_png/cloudinary-tools-uploads/gfsdp2ybbi6bwtng7cfa" alt="شعار جامع أمهات المؤمنين" class="w-full h-full object-contain">
+            <div class="w-24 h-24 bg-[#2e0b14] rounded-3xl p-2 flex items-center justify-center mx-auto border border-[#b89753]/50 shadow-xl shadow-[#4a1525]/50 overflow-hidden">
+                <img src="https://cdn.phototourl.com/member/2026-11-09-d3183717-c707-41d4-82e3-45dca7770f59.png" alt="شعار جامع أمهات المؤمنين" class="w-full h-full object-contain" crossorigin="anonymous">
             </div>
             
             <div class="space-y-2">
@@ -78,9 +81,8 @@
     <header class="bg-white/90 dark:bg-[#1a070e]/90 backdrop-blur-md border-b border-[#b89753]/20 sticky top-0 z-30 shadow-sm transition-all duration-300">
         <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <!-- الشعار في الهيدر -->
-                <div class="w-12 h-12 flex items-center justify-center">
-                    <img src="https://res.cloudinary.com/dtz0urit6/image/upload/q_auto:best,f_png/cloudinary-tools-uploads/gfsdp2ybbi6bwtng7cfa" alt="شعار جامع أمهات المؤمنين" class="w-full h-full object-contain">
+                <div class="w-12 h-12 bg-[#2e0b14] rounded-2xl p-1 flex items-center justify-center border border-[#b89753]/40 shadow-md shadow-[#4a1525]/30 overflow-hidden">
+                    <img src="https://cdn.phototourl.com/member/2026-11-09-d3183717-c707-41d4-82e3-45dca7770f59.png" alt="شعار جامع أمهات المؤمنين" class="w-full h-full object-contain" crossorigin="anonymous">
                 </div>
                 <div>
                     <h1 class="font-black text-lg text-slate-900 dark:text-amber-100 leading-tight tracking-tight">جامع أمهات المؤمنين</h1>
@@ -111,9 +113,6 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2.5 flex-wrap">
-                    <button onclick="copyAllBookingsSummary()" class="text-xs font-black px-4 py-2.5 rounded-xl bg-[#2e0b14] hover:bg-[#4a1525] text-amber-200 border border-[#b89753]/40 transition shadow-md flex items-center gap-2">
-                        <i class="fa-solid fa-copy text-sm"></i> نسخ ملخص الحجوزات
-                    </button>
                     <button onclick="confirmResetAllBookings()" class="text-xs font-black px-4 py-2.5 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/40 transition shadow-md flex items-center gap-2">
                         <i class="fa-solid fa-rotate-left text-sm"></i> تفريغ الكُل
                     </button>
@@ -142,10 +141,28 @@
 
     <!-- Main App Container -->
     <main class="max-w-5xl mx-auto px-4 py-8 w-full flex-grow space-y-8">
+        
+        <!-- Top 3 Students Podium & Statistics Section -->
+        <section class="bg-white dark:bg-[#1a070e] rounded-3xl p-6 md:p-8 shadow-xl border border-amber-200/50 dark:border-[#b89753]/20">
+            <div class="flex items-center justify-between mb-6 pb-4 border-b border-amber-100 dark:border-[#8c703b]/20">
+                <div>
+                    <h3 class="text-lg font-extrabold text-slate-900 dark:text-amber-100 flex items-center gap-2.5">
+                        <i class="fa-solid fa-trophy text-[#b89753]"></i> لوحة إحصائيات أفضل الطلاب تفوقاً
+                    </h3>
+                    <p class="text-xs font-semibold text-slate-400 mt-0.5">ترتيب الأوائل بناءً على سرعة المبادرة وتوثيق الحجوزات</p>
+                </div>
+            </div>
+            <div id="topStudentsContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Will be rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- Student Booking Action Card -->
         <section class="bg-white dark:bg-[#1a070e] rounded-3xl p-6 md:p-8 shadow-xl border border-amber-200/50 dark:border-[#b89753]/20" id="mainActionCard">
             <!-- Dynamic Content -->
         </section>
 
+        <!-- Bookings List Section -->
         <section class="bg-white dark:bg-[#1a070e] rounded-3xl p-6 md:p-8 shadow-xl border border-amber-200/50 dark:border-[#b89753]/20" id="bookingsSection">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-amber-100 dark:border-[#8c703b]/20">
                 <div>
@@ -264,7 +281,7 @@
             const currentTimeVal = currentHour * 60 + currentMinute;
 
             const openTimeVal = 17 * 60;       // 5:00 مساءً
-            const closeTimeVal = 20 * 60 + 30; // 8:30 مساءً (تم ضبطه على الثامنة والنصف)
+            const closeTimeVal = 20 * 60 + 30; // 8:30 مساءً
 
             const overlay = document.getElementById('closedOverlay');
             const msgEl = document.getElementById('closedMessage');
@@ -322,9 +339,50 @@
                 });
                 renderMainPanel();
                 renderBookings();
+                renderTopStudents();
                 updateAdminStats();
             });
         }
+
+        window.renderTopStudents = function() {
+            const container = document.getElementById('topStudentsContainer');
+            if (!container) return;
+
+            // حساب الإحصائيات (أفضل 3 طلاب قاموا بالحجز مبكراً)
+            const sortedBookings = [...bookings].sort((a, b) => (a.bookedAt > b.bookedAt ? 1 : -1));
+            const top3 = sortedBookings.slice(0, 3);
+
+            if (top3.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-3 py-8 text-center text-slate-400 text-xs font-bold bg-amber-50/50 dark:bg-[#2e0b14]/30 rounded-2xl border border-dashed border-[#b89753]/30">
+                        لم يتم تسجيل أي حجوزات حتى الآن لتحديد الأوائل
+                    </div>
+                `;
+                return;
+            }
+
+            const medals = [
+                { icon: "fa-crown text-amber-400", title: "المركز الأول", bg: "border-amber-400/60 shadow-amber-500/20" },
+                { icon: "fa-medal text-slate-300", title: "المركز الثاني", bg: "border-slate-400/40 shadow-slate-500/10" },
+                { icon: "fa-award text-amber-700", title: "المركز الثالث", bg: "border-amber-700/40 shadow-amber-900/10" }
+            ];
+
+            container.innerHTML = top3.map((b, index) => `
+                <div class="podium-card p-5 rounded-2xl border ${medals[index].bg} flex items-center justify-between relative overflow-hidden">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid ${medals[index].icon} text-sm"></i>
+                            <span class="text-[11px] font-black text-[#b89753]">${medals[index].title}</span>
+                        </div>
+                        <h4 class="font-black text-white text-base">${b.studentName}</h4>
+                        <span class="text-xs text-amber-200/60 block">وقت الإنجاز: ${b.bookedAt}</span>
+                    </div>
+                    <div class="w-12 h-12 bg-[#b89753] text-slate-950 rounded-xl flex items-center justify-center font-black text-xl shadow-md">
+                        #${b.number}
+                    </div>
+                </div>
+            `).join('');
+        };
 
         window.handleMakeBooking = async function(event) {
             event.preventDefault();
@@ -343,7 +401,7 @@
                 number: desiredNumber,
                 studentName: loggedInStudent.name,
                 studentCode: loggedInStudent.code,
-                bookedAt: new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })
+                bookedAt: new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
             };
 
             try {
@@ -405,10 +463,7 @@
 
         window.handleAdminLogin = function(event) {
             event.preventDefault();
-            const toEnglishDigits = str => str
-                .replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 1632))
-                .replace(/[۰-۹]/g, d => String(d.charCodeAt(0) - 1776));
-            const inputCode = toEnglishDigits(document.getElementById('loginInputCode').value).replace(/\s+/g, '');
+            const inputCode = document.getElementById('loginInputCode').value.trim();
             if (inputCode === ADMIN_PHONE) {
                 isAdminLoggedIn = true;
                 localStorage.setItem("numbers_admin", "true");
@@ -421,18 +476,6 @@
             } else {
                 document.getElementById('loginErrorMsg').classList.remove('hidden');
             }
-        };
-
-        window.copyAllBookingsSummary = function() {
-            if (bookings.length === 0) { showToast("لا توجد حجوزات لنسخها.", "info"); return; }
-            const text = bookings
-                .slice()
-                .sort((a, b) => Number(a.number) - Number(b.number))
-                .map(b => `#${b.number} - ${b.studentName}`)
-                .join('\n');
-            navigator.clipboard.writeText(text)
-                .then(() => showToast("تم نسخ ملخص الحجوزات.", "success"))
-                .catch(() => showToast("تعذر النسخ.", "error"));
         };
 
         window.handleAdminLogout = function() {
@@ -526,7 +569,7 @@
                     ${filtered.map(b => `
                         <div class="${isAdminLoggedIn ? 'bg-[#1a070e] border-[#b89753]/50 text-amber-100' : 'bg-slate-50 dark:bg-[#2e0b14]/50 border-amber-200 dark:border-[#8c703b]/30 text-slate-800 dark:text-amber-100'} border rounded-2xl p-4 flex items-center justify-between">
                             <div class="flex items-center gap-3.5">
-                                <div class="px-4 py-2.5 ${isAdminLoggedIn ? 'bg-[#b89753] text-slate-950' : 'bg-[#b89753] text-slate-950'} rounded-xl font-black text-2xl shadow">#${b.number}</div>
+                                <div class="px-4 py-2.5 bg-[#b89753] text-slate-950 rounded-xl font-black text-2xl shadow">#${b.number}</div>
                                 <div>
                                     <h4 class="font-black text-base">${b.studentName}</h4>
                                     <span class="text-xs text-slate-400 dark:text-amber-200/50">${b.bookedAt}</span>
