@@ -56,7 +56,7 @@
 </head>
 <body class="bg-amber-50/40 dark:bg-[#120408] min-h-screen text-slate-800 dark:text-amber-100 flex flex-col justify-between selection:bg-[#b89753] selection:text-white transition-colors duration-300">
 
-    <!-- Locked State Overlay -->
+    <!-- Locked State Overlay (صفحة الانتظار والترقب الأساسية) -->
     <div id="closedOverlay" class="fixed inset-0 bg-[#0d0307] z-50 flex items-center justify-center p-4 hidden">
         <div class="max-w-md w-full bg-[#1a070e] border border-[#8c703b]/40 rounded-3xl p-8 text-center space-y-6 shadow-2xl relative overflow-hidden">
             <div class="w-24 h-24 bg-[#2e0b14] rounded-3xl p-2 flex items-center justify-center mx-auto border border-[#b89753]/50 shadow-xl shadow-[#4a1525]/50 overflow-hidden">
@@ -117,6 +117,9 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2.5 flex-wrap">
+                    <button onclick="copyAllBookingsSummary()" class="text-xs font-black px-4 py-2.5 rounded-xl bg-[#2e0b14] hover:bg-[#4a1525] text-amber-200 border border-[#b89753]/40 transition shadow-md flex items-center gap-2">
+                        <i class="fa-solid fa-copy text-sm"></i> نسخ ملخص الحجوزات
+                    </button>
                     <button onclick="confirmResetAllBookings()" class="text-xs font-black px-4 py-2.5 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/40 transition shadow-md flex items-center gap-2">
                         <i class="fa-solid fa-rotate-left text-sm"></i> تفريغ الكُل
                     </button>
@@ -309,13 +312,11 @@
             const msgEl = document.getElementById('closedMessage');
             const timerBox = document.getElementById('countdownBox');
 
-            // إذا كان المشرف مسجلاً للدخول، نسمح له بالتحكم متى ما أراد متجاوزاً الإغلاق
             if (isAdminLoggedIn) {
                 overlay.classList.add('hidden');
                 return;
             }
 
-            // فحص فترة الإغلاق (ما قبل الساعة 5:00 عصراً أو ما بعد 8:30 مساءً)
             if (currentTimeVal < openTimeVal || currentTimeVal >= closeTimeVal) {
                 overlay.classList.remove('hidden');
                 
@@ -331,7 +332,6 @@
                     msgEl.innerText = "انتهى وقت الحجز وتم إغلاق النظام حتى يوم غد";
                 }
 
-                // الحذف التلقائي الفوري لجميع الحجوزات بمجرد دخول وقت الإغلاق إذا وجد شيء مسجل
                 if (bookings.length > 0) {
                     try {
                         const batch = writeBatch(db);
@@ -339,7 +339,6 @@
                             batch.delete(doc(db, "bookings", b.number));
                         }
                         await batch.commit();
-                        console.log("تم تفريغ الحجوزات تلقائياً بنجاح لانتهاء الوقت.");
                     } catch (e) {
                         console.error("Auto clear error", e);
                     }
@@ -369,7 +368,7 @@
                 snapshot.forEach((docSnap) => {
                     bookings.push(docSnap.data());
                 });
-                checkTimeRestriction(); // التحقق الفوري مع كل تحديث سحابي
+                checkTimeRestriction();
                 renderMainPanel();
                 renderBookings();
                 renderTopStudents();
@@ -432,6 +431,25 @@
                     </div>
                 </div>
             `).join('');
+        };
+
+        window.copyAllBookingsSummary = function() {
+            if (bookings.length === 0) {
+                showToast("لا توجد حجوزات لنسخها حالياً!", "error");
+                return;
+            }
+            const sorted = [...bookings].sort((a, b) => Number(a.number) - Number(b.number));
+            let summaryText = "📋 *تقرير حجوزات جامع أمهات المؤمنين*\n\n";
+            sorted.forEach((b, idx) => {
+                summaryText += `${idx + 1}. الطالب: *${b.studentName}* - الرقم: *#${b.number}* (${b.bookedAt})\n`;
+            });
+            summaryText += `\nإجمالي الحجوزات: ${bookings.length} من ${STUDENTS_DATABASE.length}`;
+
+            navigator.clipboard.writeText(summaryText).then(() => {
+                showToast("تم نسخ ملخص الحجوزات بنجاح جاهز للنشر!", "success");
+            }).catch(() => {
+                showToast("فشل النسخ للحافظة.", "error");
+            });
         };
 
         window.handleMakeBooking = async function(event) {
@@ -656,6 +674,7 @@
             }
         }
 
+        window.openLoginModal = function() { document.getElementById('loginModal').classList.add('hidden'); } // للسلامة
         window.openLoginModal = function() { document.getElementById('loginModal').classList.remove('hidden'); };
         window.closeLoginModal = function() { document.getElementById('loginModal').classList.add('hidden'); };
 
