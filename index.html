@@ -48,6 +48,10 @@
             border: 1px solid rgba(184, 151, 83, 0.4);
             box-shadow: 0 10px 25px -5px rgba(184, 151, 83, 0.15);
         }
+        .progress-bar-glow {
+            box-shadow: 0 0 15px rgba(184, 151, 83, 0.5);
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
     </style>
 </head>
 <body class="bg-amber-50/40 dark:bg-[#120408] min-h-screen text-slate-800 dark:text-amber-100 flex flex-col justify-between selection:bg-[#b89753] selection:text-white transition-colors duration-300">
@@ -142,18 +146,42 @@
     <!-- Main App Container -->
     <main class="max-w-5xl mx-auto px-4 py-8 w-full flex-grow space-y-8">
         
-        <!-- Top 3 Students Podium & Statistics Section -->
-        <section class="bg-white dark:bg-[#1a070e] rounded-3xl p-6 md:p-8 shadow-xl border border-amber-200/50 dark:border-[#b89753]/20">
-            <div class="flex items-center justify-between mb-6 pb-4 border-b border-amber-100 dark:border-[#8c703b]/20">
+        <!-- Interactive Visual Statistics & Chart Section -->
+        <section class="bg-white dark:bg-[#1a070e] rounded-3xl p-6 md:p-8 shadow-xl border border-amber-200/50 dark:border-[#b89753]/20 space-y-6">
+            <div class="flex items-center justify-between pb-4 border-b border-amber-100 dark:border-[#8c703b]/20">
                 <div>
                     <h3 class="text-lg font-extrabold text-slate-900 dark:text-amber-100 flex items-center gap-2.5">
-                        <i class="fa-solid fa-trophy text-[#b89753]"></i> لوحة إحصائيات أفضل الطلاب تفوقاً
+                        <i class="fa-solid fa-chart-pie text-[#b89753]"></i> لوحة الإحصائيات والرسم البياني للحجوزات
                     </h3>
-                    <p class="text-xs font-semibold text-slate-400 mt-0.5">ترتيب الأوائل بناءً على سرعة المبادرة وتوثيق الحجوزات</p>
+                    <p class="text-xs font-semibold text-slate-400 mt-0.5">مؤشر بصري تفاعلي يوضح نسبة إنجاز الحجوزات اليومية</p>
                 </div>
             </div>
-            <div id="topStudentsContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Will be rendered dynamically -->
+
+            <!-- Visual Chart Bar -->
+            <div class="space-y-3 bg-amber-50/50 dark:bg-[#2e0b14]/40 p-5 rounded-2xl border border-amber-200/60 dark:border-[#b89753]/30">
+                <div class="flex justify-between items-center text-xs font-black">
+                    <span class="text-slate-700 dark:text-amber-200">نسبة اكتمال الأرقام</span>
+                    <span id="chartPercentageText" class="text-[#b89753] font-mono text-sm">0%</span>
+                </div>
+                <!-- Progress Track -->
+                <div class="w-full bg-slate-200 dark:bg-[#1a070e] h-4 rounded-full overflow-hidden p-0.5 border border-[#8c703b]/30 shadow-inner">
+                    <div id="chartProgressBar" class="bg-gradient-to-r from-[#b89753] to-amber-300 h-full rounded-full progress-bar-glow" style="width: 0%"></div>
+                </div>
+                <div class="flex justify-between items-center text-[11px] font-bold text-slate-400 dark:text-amber-200/60 pt-1">
+                    <span>محجوز: <strong id="chartBookedCount" class="text-slate-800 dark:text-amber-100">0</strong></span>
+                    <span>المتبقي: <strong id="chartRemainingCount" class="text-slate-800 dark:text-amber-100">21</strong></span>
+                    <span>الإجمالي: <strong class="text-slate-800 dark:text-amber-100">21 طالب</strong></span>
+                </div>
+            </div>
+
+            <!-- Top 3 Students Podium -->
+            <div>
+                <h4 class="text-sm font-extrabold text-slate-900 dark:text-amber-100 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-trophy text-[#b89753]"></i> أفضل 3 طلاب تفوقاً في سرعة الإنجاز
+                </h4>
+                <div id="topStudentsContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Will be rendered dynamically -->
+                </div>
             </div>
         </section>
 
@@ -340,9 +368,27 @@
                 renderMainPanel();
                 renderBookings();
                 renderTopStudents();
+                updateChartAndStats();
                 updateAdminStats();
             });
         }
+
+        window.updateChartAndStats = function() {
+            const totalStudents = STUDENTS_DATABASE.length;
+            const bookedCount = bookings.length;
+            const remainingCount = Math.max(0, totalStudents - bookedCount);
+            const percentage = Math.round((bookedCount / totalStudents) * 100);
+
+            const bar = document.getElementById('chartProgressBar');
+            const text = document.getElementById('chartPercentageText');
+            const bookedEl = document.getElementById('chartBookedCount');
+            const remEl = document.getElementById('chartRemainingCount');
+
+            if (bar) bar.style.width = `${percentage}%`;
+            if (text) text.innerText = `${percentage}%`;
+            if (bookedEl) bookedEl.innerText = bookedCount;
+            if (remEl) remEl.innerText = remainingCount;
+        };
 
         window.renderTopStudents = function() {
             const container = document.getElementById('topStudentsContainer');
@@ -353,7 +399,7 @@
 
             if (top3.length === 0) {
                 container.innerHTML = `
-                    <div class="col-span-3 py-8 text-center text-slate-400 text-xs font-bold bg-amber-50/50 dark:bg-[#2e0b14]/30 rounded-2xl border border-dashed border-[#b89753]/30">
+                    <div class="col-span-3 py-6 text-center text-slate-400 text-xs font-bold bg-amber-50/50 dark:bg-[#2e0b14]/30 rounded-2xl border border-dashed border-[#b89753]/30">
                         لم يتم تسجيل أي حجوزات حتى الآن لتحديد الأوائل
                     </div>
                 `;
@@ -367,16 +413,16 @@
             ];
 
             container.innerHTML = top3.map((b, index) => `
-                <div class="podium-card p-5 rounded-2xl border ${medals[index].bg} flex items-center justify-between relative overflow-hidden">
+                <div class="podium-card p-4 rounded-2xl border ${medals[index].bg} flex items-center justify-between relative overflow-hidden">
                     <div class="space-y-1">
-                        <div class="flex items-center gap-2">
-                            <i class="fa-solid ${medals[index].icon} text-sm"></i>
-                            <span class="text-[11px] font-black text-[#b89753]">${medals[index].title}</span>
+                        <div class="flex items-center gap-1.5">
+                            <i class="fa-solid ${medals[index].icon} text-xs"></i>
+                            <span class="text-[10px] font-black text-[#b89753]">${medals[index].title}</span>
                         </div>
-                        <h4 class="font-black text-white text-base">${b.studentName}</h4>
-                        <span class="text-xs text-amber-200/60 block">وقت الإنجاز: ${b.bookedAt}</span>
+                        <h4 class="font-black text-white text-sm">${b.studentName}</h4>
+                        <span class="text-[11px] text-amber-200/60 block font-mono">وقت الإنجاز: ${b.bookedAt}</span>
                     </div>
-                    <div class="w-12 h-12 bg-[#b89753] text-slate-950 rounded-xl flex items-center justify-center font-black text-xl shadow-md">
+                    <div class="w-10 h-10 bg-[#b89753] text-slate-950 rounded-xl flex items-center justify-center font-black text-base shadow-md">
                         #${b.number}
                     </div>
                 </div>
@@ -556,7 +602,6 @@
             const countDisplay = document.getElementById('totalBookingsCount');
             if (countDisplay) countDisplay.innerText = bookings.length;
 
-            // ترتيب الحجوزات تصاعدياً بناءً على الرقم المدخل (من الأصغر للأكبر: 1, 2, 3...)
             const sortedBookings = [...bookings].sort((a, b) => Number(a.number) - Number(b.number));
             const filtered = sortedBookings.filter(b => b.number.includes(searchVal) || b.studentName.toLowerCase().includes(searchVal));
 
