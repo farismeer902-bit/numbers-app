@@ -56,7 +56,7 @@
 </head>
 <body class="bg-amber-50/40 dark:bg-[#120408] min-h-screen text-slate-800 dark:text-amber-100 flex flex-col justify-between selection:bg-[#b89753] selection:text-white transition-colors duration-300">
 
-    <!-- Locked State Overlay (صفحة الانتظار والترقب الأساسية) -->
+    <!-- Locked State Overlay (صفحة الانتظار والافتتاح) -->
     <div id="closedOverlay" class="fixed inset-0 bg-[#0d0307] z-50 flex items-center justify-center p-4 hidden">
         <div class="max-w-md w-full bg-[#1a070e] border border-[#8c703b]/40 rounded-3xl p-8 text-center space-y-6 shadow-2xl relative overflow-hidden">
             <div class="w-24 h-24 bg-[#2e0b14] rounded-3xl p-2 flex items-center justify-center mx-auto border border-[#b89753]/50 shadow-xl shadow-[#4a1525]/50 overflow-hidden">
@@ -90,7 +90,7 @@
                 </div>
                 <div>
                     <h1 class="font-black text-lg text-slate-900 dark:text-amber-100 leading-tight tracking-tight">جامع أمهات المؤمنين</h1>
-                    <p class="text-[10px] font-bold text-[#b89753]">نظام حجز الأرقام</p>
+                    <p class="text-[10px] font-bold text-[#b89753]">نظام حجز الأرقام الذكي</p>
                 </div>
             </div>
 
@@ -112,26 +112,26 @@
                         <i class="fa-solid fa-user-gear"></i>
                     </div>
                     <div>
-                        <h2 class="font-black text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-[#b89753] to-amber-100">مركز عمليات وتوجيه المشرف</h2>
-                        <p class="text-xs text-amber-200/70 mt-1 font-semibold">لوحة الإدارة المتقدمة لمتابعة وتفريغ الحجوزات سحابياً</p>
+                        <h2 class="font-black text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-[#b89753] to-amber-100">مركز عمليات المشرف</h2>
+                        <p class="text-xs text-amber-200/70 mt-1 font-semibold">إدارة ومتابعة الحجوزات والتفريغ السحابي الفوري</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2.5 flex-wrap">
                     <button onclick="copyAllBookingsSummary()" class="text-xs font-black px-4 py-2.5 rounded-xl bg-[#2e0b14] hover:bg-[#4a1525] text-amber-200 border border-[#b89753]/40 transition shadow-md flex items-center gap-2">
-                        <i class="fa-solid fa-copy text-sm"></i> نسخ ملخص الحجوزات
+                        <i class="fa-solid fa-copy text-sm"></i> نسخ تقرير الحجوزات
                     </button>
                     <button onclick="confirmResetAllBookings()" class="text-xs font-black px-4 py-2.5 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/40 transition shadow-md flex items-center gap-2">
                         <i class="fa-solid fa-rotate-left text-sm"></i> تفريغ الكُل
                     </button>
                     <button onclick="handleAdminLogout()" class="text-xs font-black px-4 py-2.5 rounded-xl bg-rose-950/60 hover:bg-rose-900 text-rose-200 border border-rose-500/40 transition shadow-md flex items-center gap-2">
-                        <i class="fa-solid fa-power-off text-sm"></i> خروج المشرف
+                        <i class="fa-solid fa-power-off text-sm"></i> خروج
                     </button>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="admin-card-glass p-5 rounded-2xl flex flex-col justify-between">
-                    <span class="text-[11px] font-black text-amber-200/60">إجمالي قائمة الطلاب</span>
+                    <span class="text-[11px] font-black text-amber-200/60">إجمالي طلاب الحلقة</span>
                     <span class="text-3xl font-black text-white mt-3">21</span>
                 </div>
                 <div class="admin-card-glass p-5 rounded-2xl flex flex-col justify-between border-[#b89753]/50">
@@ -154,35 +154,35 @@
             <div class="flex items-center justify-between pb-4 border-b border-amber-100 dark:border-[#8c703b]/20">
                 <div>
                     <h3 class="text-lg font-extrabold text-slate-900 dark:text-amber-100 flex items-center gap-2.5">
-                        <i class="fa-solid fa-chart-pie text-[#b89753]"></i> لوحة الإحصائيات والرسم البياني للحجوزات
+                        <i class="fa-solid fa-chart-pie text-[#b89753]"></i> إحصائيات ونسبة اكتمال الحجز
                     </h3>
-                    <p class="text-xs font-semibold text-slate-400 mt-0.5">مؤشر بصري تفاعلي يوضح نسبة إنجاز الحجوزات اليومية</p>
+                    <p class="text-xs font-semibold text-slate-400 mt-0.5">مؤشر بصر تفاعلي يستعرض تقدم تسجيل الطلاب</p>
                 </div>
             </div>
 
-            <!-- Visual Chart Bar -->
+            <!-- Visual Progress Bar -->
             <div class="space-y-3 bg-amber-50/50 dark:bg-[#2e0b14]/40 p-5 rounded-2xl border border-amber-200/60 dark:border-[#b89753]/30">
                 <div class="flex justify-between items-center text-xs font-black">
-                    <span class="text-slate-700 dark:text-amber-200">نسبة اكتمال الأرقام</span>
+                    <span class="text-slate-700 dark:text-amber-200">نسبة الإنجاز اليومية</span>
                     <span id="chartPercentageText" class="text-[#b89753] font-mono text-sm">0%</span>
                 </div>
                 <div class="w-full bg-slate-200 dark:bg-[#1a070e] h-4 rounded-full overflow-hidden p-0.5 border border-[#8c703b]/30 shadow-inner">
                     <div id="chartProgressBar" class="bg-gradient-to-r from-[#b89753] to-amber-300 h-full rounded-full progress-bar-glow" style="width: 0%"></div>
                 </div>
                 <div class="flex justify-between items-center text-[11px] font-bold text-slate-400 dark:text-amber-200/60 pt-1">
-                    <span>محجوز: <strong id="chartBookedCount" class="text-slate-800 dark:text-amber-100">0</strong></span>
+                    <span>تم حجز: <strong id="chartBookedCount" class="text-slate-800 dark:text-amber-100">0</strong></span>
                     <span>المتبقي: <strong id="chartRemainingCount" class="text-slate-800 dark:text-amber-100">21</strong></span>
-                    <span>الإجمالي: <strong class="text-slate-800 dark:text-amber-100">21 طالب</strong></span>
+                    <span>إجمالي العدد: <strong class="text-slate-800 dark:text-amber-100">21 طالب</strong></span>
                 </div>
             </div>
 
-            <!-- Top 3 Students Podium -->
+            <!-- Top 3 Podium Section -->
             <div>
                 <h4 class="text-sm font-extrabold text-slate-900 dark:text-amber-100 mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-trophy text-[#b89753]"></i> أفضل 3 طلاب تفوقاً في سرعة الإنجاز
+                    <i class="fa-solid fa-trophy text-[#b89753]"></i> قائمة الطلاب الأسرع في الإنجاز (Top 3)
                 </h4>
                 <div id="topStudentsContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Will be rendered dynamically -->
+                    <!-- Dynamic Top 3 -->
                 </div>
             </div>
         </section>
@@ -197,9 +197,9 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-amber-100 dark:border-[#8c703b]/20">
                 <div>
                     <h3 class="text-lg font-extrabold text-slate-900 dark:text-amber-100 flex items-center gap-2.5">
-                        <i class="fa-solid fa-list-check text-[#b89753]"></i> جدول الحجوزات الحالية (مرتبة حسب الرقم)
+                        <i class="fa-solid fa-list-check text-[#b89753]"></i> جدول الحجوزات (مرتب حسب رقم الحجز)
                     </h3>
-                    <p class="text-xs font-semibold text-slate-400 mt-0.5">إجمالي الأرقام المحجوزة: <span id="totalBookingsCount" class="font-black text-[#b89753] bg-amber-50 dark:bg-[#2e0b14] px-2 py-0.5 rounded-md border border-[#b89753]/30">0</span></p>
+                    <p class="text-xs font-semibold text-slate-400 mt-0.5">عدد الحجوزات: <span id="totalBookingsCount" class="font-black text-[#b89753] bg-amber-50 dark:bg-[#2e0b14] px-2 py-0.5 rounded-md border border-[#b89753]/30">0</span></p>
                 </div>
                 <div class="relative w-full sm:w-72">
                     <input type="text" id="searchInput" oninput="renderBookings()" placeholder="بحث باسم الطالب أو الرقم..."
@@ -236,7 +236,7 @@
 
     <div id="toastContainer" class="fixed bottom-6 left-6 z-50 flex flex-col gap-2 max-w-xs"></div>
 
-    <!-- Firebase SDK & App Logic -->
+    <!-- Firebase SDK & Script logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-app.js";
         import { 
@@ -413,7 +413,7 @@
             const medals = [
                 { icon: "fa-crown text-amber-400", title: "المركز الأول", bg: "border-amber-400/60 shadow-amber-500/20" },
                 { icon: "fa-medal text-slate-300", title: "المركز الثاني", bg: "border-slate-400/40 shadow-slate-500/10" },
-                { icon: "fa-award text-amber-700", title: "المركز الثالث", bg: "border-amber-700/40 shadow-amber-900/10" }
+                { icon: "fa-award text-amber-700", title: "المركز الثالث", bg: "border-amber-700/40 shadow-[#b89753]/10" }
             ];
 
             container.innerHTML = top3.map((b, index) => `
@@ -450,6 +450,11 @@
             }).catch(() => {
                 showToast("فشل النسخ للحافظة.", "error");
             });
+        };
+
+        window.selectQuickNumber = function(num) {
+            const input = document.getElementById('desiredNumberInput');
+            if (input) input.value = num;
         };
 
         window.handleMakeBooking = async function(event) {
@@ -589,6 +594,11 @@
                 `;
             } else {
                 const existingBooking = bookings.find(b => b.studentCode === loggedInStudent.code);
+                
+                // تجميع الأرقام المتاحة بسرعة من 1 إلى 21
+                const bookedNums = bookings.map(b => Number(b.number));
+                const availableNums = Array.from({length: 21}, (_, i) => i + 1).filter(n => !bookedNums.includes(n));
+
                 container.innerHTML = `
                     <div class="flex items-center justify-between pb-5 mb-5 border-b border-amber-100 dark:border-[#8c703b]/20">
                         <div class="flex items-center gap-3.5">
@@ -609,7 +619,17 @@
                         </div>
                     ` : `
                         <form onsubmit="handleMakeBooking(event)" class="space-y-4">
-                            <label class="block text-xs font-black text-slate-700 dark:text-amber-200/80 mb-1.5">أدخل الرقم المميز الذي ترغب بحجزه</label>
+                            <label class="block text-xs font-black text-slate-700 dark:text-amber-200/80 mb-1.5">أدخل الرقم المميز أو اختره من الخيارات المتاحة:</label>
+                            
+                            <!-- Quick Pick Grid -->
+                            ${availableNums.length > 0 ? `
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    ${availableNums.slice(0, 10).map(num => `
+                                        <button type="button" onclick="selectQuickNumber(${num})" class="px-3 py-1.5 bg-amber-100/60 dark:bg-[#2e0b14] hover:bg-[#b89753] hover:text-slate-950 text-xs font-bold rounded-xl border border-[#b89753]/30 transition">#${num}</button>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+
                             <input type="number" id="desiredNumberInput" required min="1" max="9999" placeholder="مثال: 7"
                                 class="w-full px-4 py-4 bg-slate-50 dark:bg-[#2e0b14] border border-amber-200 dark:border-[#8c703b]/40 rounded-2xl text-slate-900 dark:text-amber-100 text-center text-xl font-black outline-none shadow-inner">
                             <button type="submit" class="w-full bg-[#b89753] hover:bg-[#8c703b] text-slate-950 font-black py-4 rounded-2xl shadow-lg text-sm transition">تأكيد وتوثيق الحجز</button>
@@ -674,7 +694,6 @@
             }
         }
 
-        window.openLoginModal = function() { document.getElementById('loginModal').classList.add('hidden'); } // للسلامة
         window.openLoginModal = function() { document.getElementById('loginModal').classList.remove('hidden'); };
         window.closeLoginModal = function() { document.getElementById('loginModal').classList.add('hidden'); };
 
