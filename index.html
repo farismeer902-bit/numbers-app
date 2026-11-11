@@ -163,7 +163,6 @@
                     <span class="text-slate-700 dark:text-amber-200">نسبة اكتمال الأرقام</span>
                     <span id="chartPercentageText" class="text-[#b89753] font-mono text-sm">0%</span>
                 </div>
-                <!-- Progress Track -->
                 <div class="w-full bg-slate-200 dark:bg-[#1a070e] h-4 rounded-full overflow-hidden p-0.5 border border-[#8c703b]/30 shadow-inner">
                     <div id="chartProgressBar" class="bg-gradient-to-r from-[#b89753] to-amber-300 h-full rounded-full progress-bar-glow" style="width: 0%"></div>
                 </div>
@@ -298,11 +297,6 @@
         };
 
         async function checkTimeRestriction() {
-            if (isAdminLoggedIn) {
-                document.getElementById('closedOverlay').classList.add('hidden');
-                return;
-            }
-
             const now = new Date();
             const currentHour = now.getHours();
             const currentMinute = now.getMinutes();
@@ -315,20 +309,29 @@
             const msgEl = document.getElementById('closedMessage');
             const timerBox = document.getElementById('countdownBox');
 
-            if (currentTimeVal < openTimeVal) {
-                overlay.classList.remove('hidden');
-                timerBox.classList.remove('hidden');
-                msgEl.innerText = "انتظر حتى الساعة الخامسة وسوف يفتح الرابط";
-                
-                const targetTime = new Date();
-                targetTime.setHours(17, 0, 0, 0);
-                updateCountdown(targetTime, now);
-            } 
-            else if (currentTimeVal >= closeTimeVal) {
-                overlay.classList.remove('hidden');
-                timerBox.classList.add('hidden');
-                msgEl.innerText = "انتهى وقت الحجز وتم إغلاق النظام حتى يوم غد";
+            // إذا كان المشرف مسجلاً للدخول، نسمح له بالتحكم متى ما أراد متجاوزاً الإغلاق
+            if (isAdminLoggedIn) {
+                overlay.classList.add('hidden');
+                return;
+            }
 
+            // فحص فترة الإغلاق (ما قبل الساعة 5:00 عصراً أو ما بعد 8:30 مساءً)
+            if (currentTimeVal < openTimeVal || currentTimeVal >= closeTimeVal) {
+                overlay.classList.remove('hidden');
+                
+                if (currentTimeVal < openTimeVal) {
+                    timerBox.classList.remove('hidden');
+                    msgEl.innerText = "انتظر حتى الساعة الخامسة وسوف يفتح الرابط";
+                    
+                    const targetTime = new Date();
+                    targetTime.setHours(17, 0, 0, 0);
+                    updateCountdown(targetTime, now);
+                } else {
+                    timerBox.classList.add('hidden');
+                    msgEl.innerText = "انتهى وقت الحجز وتم إغلاق النظام حتى يوم غد";
+                }
+
+                // الحذف التلقائي الفوري لجميع الحجوزات بمجرد دخول وقت الإغلاق إذا وجد شيء مسجل
                 if (bookings.length > 0) {
                     try {
                         const batch = writeBatch(db);
@@ -336,6 +339,7 @@
                             batch.delete(doc(db, "bookings", b.number));
                         }
                         await batch.commit();
+                        console.log("تم تفريغ الحجوزات تلقائياً بنجاح لانتهاء الوقت.");
                     } catch (e) {
                         console.error("Auto clear error", e);
                     }
@@ -365,6 +369,7 @@
                 snapshot.forEach((docSnap) => {
                     bookings.push(docSnap.data());
                 });
+                checkTimeRestriction(); // التحقق الفوري مع كل تحديث سحابي
                 renderMainPanel();
                 renderBookings();
                 renderTopStudents();
